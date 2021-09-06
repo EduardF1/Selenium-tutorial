@@ -1,8 +1,8 @@
 import os
 
 from selenium import webdriver
-
 from bot.booking.constants import BASE_URL
+from bot.booking.booking_filter import BookingFilter
 
 PATH = 'D:/SeleniumDrivers'
 
@@ -54,3 +54,30 @@ class Booking(webdriver.Chrome):
             f'td[data-date="{check_out_date}"]'
         )
         check_out_element.click()
+
+    def select_adults(self, count=1):
+        selection_toggle_element = self.find_element_by_id('xp__guests__toggle')
+        selection_toggle_element.click()
+
+        while True:
+            decrease_adults_element = self.find_element_by_css_selector(
+                'button[aria-label="Decrease number of Adults"]'
+            )
+            decrease_adults_element.click()
+            adults_value_element = self.find_element_by_id('group_adults')
+            adults_value = adults_value_element.get_attribute('value')  # get adults count
+            # once the minimum value is reached, break
+            if int(adults_value) == 1:
+                break
+
+        increase_button_element = self.find_element_by_css_selector('button[aria-label="Increase number of Adults"]')
+        for _ in range(count - 1):
+            increase_button_element.click()
+
+    def click_search(self):
+        search_button = self.find_element_by_css_selector('button[type="submit"]')
+        search_button.click()
+
+    def apply_filters(self):
+        filter = BookingFilter(driver=self)
+        filter.sort_price_lowest_first()
