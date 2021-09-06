@@ -1,7 +1,5 @@
 #   Utility class for applying filtration
-from selenium.webdriver import ActionChains
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BookingFilter:
